@@ -3,11 +3,15 @@ import { HudCard } from "@/components/hud-card";
 import { Typewriter } from "@/components/typewriter";
 import { type Briefing, getJarvisBriefing } from "@/lib/jarvis";
 import { formatTime, todayKey } from "@/lib/time";
+import { requireSession } from "@/lib/session";
 
 const TITLE = "JARVIS Summary";
 
 export async function JarvisCard() {
   await connection(); // "today" depends on the clock
+  // Second check behind proxy.ts. Outside the try: redirect() works by
+  // throwing, so catching it would break it.
+  await requireSession();
 
   let briefing: Briefing;
   try {

@@ -5,6 +5,7 @@ import { HeadlinesCard } from "@/components/headlines-card";
 import { JarvisCard } from "@/components/jarvis-card";
 import { TasksCard } from "@/components/tasks-card";
 import { WeatherCard } from "@/components/weather-card";
+import { lock } from "@/app/auth-actions";
 import { TIME_ZONE } from "@/lib/time";
 
 async function TodayDate() {
@@ -24,9 +25,19 @@ export default function Home() {
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
       <header className="mb-10 border-b border-cyan-400/20 pb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.4em] text-cyan-400/70">
-          J.A.R.V.I.S. · Morning Briefing
-        </p>
+        <div className="flex items-center justify-between gap-4">
+          <p className="font-mono text-xs uppercase tracking-[0.4em] text-cyan-400/70">
+            J.A.R.V.I.S. · Morning Briefing
+          </p>
+          <form action={lock}>
+            <button
+              type="submit"
+              className="rounded-sm border border-cyan-400/40 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.3em] text-cyan-300 transition hover:bg-cyan-400/15 hover:shadow-[0_0_18px_rgba(34,211,238,0.45)]"
+            >
+              Lock
+            </button>
+          </form>
+        </div>
         <h1 className="mt-2 text-4xl font-light text-cyan-50 drop-shadow-[0_0_12px_rgba(34,211,238,0.45)] sm:text-5xl">
           Good morning, Godwin
         </h1>

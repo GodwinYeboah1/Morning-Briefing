@@ -1,9 +1,18 @@
+import { connection } from "next/server";
 import { CardError, HudCard } from "@/components/hud-card";
 import { type Forecast, getForecast, WEATHER_PLACE } from "@/lib/weather";
+import { requireSession } from "@/lib/session";
 
 const TITLE = `Weather · ${WEATHER_PLACE}`;
 
 export async function WeatherCard() {
+  // Only for real requests: the session check reads the clock, which can't
+  // run while Next.js prerenders or prefetches.
+  await connection();
+  // Second check behind proxy.ts. Outside the try: redirect() works by
+  // throwing, so catching it would break it.
+  await requireSession();
+
   let forecast: Forecast;
   try {
     forecast = await getForecast();

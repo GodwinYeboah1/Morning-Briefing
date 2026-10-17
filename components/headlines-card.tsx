@@ -1,7 +1,16 @@
+import { connection } from "next/server";
 import { CardError, HudCard } from "@/components/hud-card";
 import { getTopStories, type Story } from "@/lib/headlines";
+import { requireSession } from "@/lib/session";
 
 export async function HeadlinesCard() {
+  // Only for real requests: the session check reads the clock, which can't
+  // run while Next.js prerenders or prefetches.
+  await connection();
+  // Second check behind proxy.ts. Outside the try: redirect() works by
+  // throwing, so catching it would break it.
+  await requireSession();
+
   let stories: Story[];
   try {
     stories = await getTopStories();

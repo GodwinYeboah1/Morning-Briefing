@@ -2,11 +2,15 @@ import { connection } from "next/server";
 import { CardError, HudCard } from "@/components/hud-card";
 import { getTasksForDay, type Task } from "@/lib/tasks";
 import { formatTime, todayKey } from "@/lib/time";
+import { requireSession } from "@/lib/session";
 
 export async function TasksCard() {
   // "Today" depends on the clock, so wait for a real request instead of
   // letting Next.js prerender this at build time.
   await connection();
+  // Second check behind proxy.ts. Outside the try: redirect() works by
+  // throwing, so catching it would break it.
+  await requireSession();
 
   let tasks: Task[];
   try {
